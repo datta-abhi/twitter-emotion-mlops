@@ -5,12 +5,15 @@ stages:
     deps:
     - path: src/data_ingestion.py
       hash: md5
-      md5: 02c64feed834b0d83530f11f98160228
-      size: 1241
+      md5: 2771c7cd645ee1467da194df9e325b91
+      size: 1456
+    params:
+      params.yaml:
+        data-ingestion.test_size: 0.3
     outs:
     - path: data/raw
       hash: md5
-      md5: 388571ec9993729b6d05e21baa9343fa.dir
+      md5: 19a9146e67c828fa19a44dffc69cc500.dir
       size: 1006158
       nfiles: 2
   data-preprocessing:
@@ -18,17 +21,17 @@ stages:
     deps:
     - path: data/raw
       hash: md5
-      md5: 388571ec9993729b6d05e21baa9343fa.dir
+      md5: 19a9146e67c828fa19a44dffc69cc500.dir
       size: 1006158
       nfiles: 2
     - path: src/data_preprocessing.py
       hash: md5
-      md5: 17e85cd5b55ab358815939f6d05c0075
-      size: 2955
+      md5: af304d7a098db6aafd0c31978e3c5f0f
+      size: 3009
     outs:
     - path: data/processed
       hash: md5
-      md5: 40e4fd3724d1924be464fcf6509ac518.dir
+      md5: 9d495283871287801990d105d2731752.dir
       size: 693605
       nfiles: 2
   feat-engg:
@@ -36,54 +39,61 @@ stages:
     deps:
     - path: data/processed
       hash: md5
-      md5: 40e4fd3724d1924be464fcf6509ac518.dir
+      md5: 9d495283871287801990d105d2731752.dir
       size: 693605
       nfiles: 2
     - path: src/feat_engg.py
       hash: md5
-      md5: 1efb4b97c850eead89f7cba9cd24eef9
-      size: 1520
+      md5: 1f1d2cafcc483f69a62f15a0628702a3
+      size: 1712
+    params:
+      params.yaml:
+        feat-engg.max_features: 1500
     outs:
     - path: data/features
       hash: md5
-      md5: 4b66849f5521479d0cb4047b37058922.dir
-      size: 27655203
+      md5: 96b302d96e8ec07f17e65673c16e0d54.dir
+      size: 41463203
       nfiles: 2
   model-building:
     cmd: python src/model_building.py
     deps:
     - path: data/features
       hash: md5
-      md5: 4b66849f5521479d0cb4047b37058922.dir
-      size: 27655203
+      md5: 96b302d96e8ec07f17e65673c16e0d54.dir
+      size: 41463203
       nfiles: 2
     - path: src/model_building.py
       hash: md5
-      md5: 970b8019e5b9fa685da41759805b79e6
-      size: 467
+      md5: 9b7c187274711f2ed40201917dfe9223
+      size: 697
+    params:
+      params.yaml:
+        model-building.learning_rate: 0.1
+        model-building.n_estimators: 100
     outs:
     - path: sentiment_model.joblib
       hash: md5
-      md5: 8c1bd913507880cdb64e26c14fcd6e3e
-      size: 101816
+      md5: 6f8557ee51eaab8320dc68914aaba2b2
+      size: 186744
   model-evaluation:
     cmd: python src/model_evaluation.py
     deps:
     - path: data/features
       hash: md5
-      md5: 4b66849f5521479d0cb4047b37058922.dir
-      size: 27655203
+      md5: 96b302d96e8ec07f17e65673c16e0d54.dir
+      size: 41463203
       nfiles: 2
     - path: sentiment_model.joblib
       hash: md5
-      md5: 8c1bd913507880cdb64e26c14fcd6e3e
-      size: 101816
+      md5: 6f8557ee51eaab8320dc68914aaba2b2
+      size: 186744
     - path: src/model_evaluation.py
       hash: md5
-      md5: 7fc10a85a323dea20b60ba7edafdb2f7
-      size: 881
+      md5: e6031e777b78d52f16610a20688f024b
+      size: 935
     outs:
     - path: metrics.json
       hash: md5
-      md5: be20a3738c83c956a72f82a7788e5e68
+      md5: 6d9ddabd7a78d82fa664a33eb8f1bc41
       size: 145

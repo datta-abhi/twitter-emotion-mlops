@@ -7,6 +7,9 @@ from pathlib import Path
 from nltk.corpus import stopwords
 from nltk.stem import SnowballStemmer, WordNetLemmatizer
 
+import warnings
+warnings.filterwarnings("ignore")
+
 # fetch data from data/raw
 train_data = pd.read_csv('./data/raw/train.csv')
 test_data = pd.read_csv('./data/raw/test.csv')

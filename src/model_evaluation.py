@@ -3,6 +3,9 @@ import pandas as pd
 import joblib
 import json
 
+import warnings
+warnings.filterwarnings("ignore")
+
 from sklearn.metrics import accuracy_score,recall_score,roc_auc_score,precision_score
 
 # load saved model

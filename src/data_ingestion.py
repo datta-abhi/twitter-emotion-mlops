@@ -1,7 +1,14 @@
+import yaml
 import numpy as np
 import pandas as pd
 from pathlib import Path
 from sklearn.model_selection import train_test_split
+
+import warnings
+warnings.filterwarnings("ignore")
+
+# reading params yaml file for hyperparameter
+test_size = yaml.safe_load(open('params.yaml','r'))['data-ingestion']['test_size']
 
 # read data from url
 df = pd.read_csv('https://raw.githubusercontent.com/campusx-official/jupyter-masterclass/main/tweet_emotions.csv')
@@ -13,10 +20,10 @@ df.drop(columns=['tweet_id'],inplace=True)
 final_df = df[df['sentiment'].isin(['neutral','sadness'])]
 
 # encode target feature
-final_df['sentiment'].replace({'neutral':1, 'sadness':0},inplace=True)
+final_df['sentiment'] = final_df['sentiment'].map({'neutral': 1, 'sadness': 0})
 
 # train test split
-train_data, test_data = train_test_split(final_df, test_size=0.2, random_state=28)
+train_data, test_data = train_test_split(final_df, test_size=test_size, random_state=28)
 
 # define paths using pathlib
 project_dir = Path(__file__).resolve().parent.parent
